@@ -1,0 +1,52 @@
+﻿@model IEnumerable<LoggerDto>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Flights</h1>
+    <table class="table table-bordered table-striped " style="width:100%">
+        <thead>
+            <tr class="text-center">
+                <th>Leg</th>
+                <th>Flight</th>
+                <th>In</th>
+                <th>Out</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var log in Model)
+            {
+                <tr>
+                    <td>@log.Leg?.Id</td>
+                    <td>@log.Flight?.Id</td>
+                    <td>@log.In</td>
+                    <td>@log.Out</td>
+                </tr>
+            }
+        </tbody>
+        @*<thead>
+        <tr class="text-center">
+        <th>Brand</th>
+        <th>Passengers</th>
+        <th>IsDeparture</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var flight in Model)
+        {
+        <tr class="hidden">
+        <td width="10%">
+        @flight.Brand
+        </td>
+        <td width="5%">
+        @flight.PassengersCount
+        </td>
+        <td width="15%" style="color: @flight.IsDeparture ? red : black">
+        @flight.IsDeparture
+        </td>
+        </tr>
+        }
+        </tbody>*@
+    </table>
+</div>
