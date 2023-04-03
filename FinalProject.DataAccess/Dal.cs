@@ -24,5 +24,10 @@ namespace FinalProject.DataAccess
             new Leg { Id = 8, Number = 8, WaitTime = 2, IsChangeStatus = true, CurrentLeg = LegNumber.Eig, NextLegs = LegNumber.Fou }
              );
         }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    // Disable logging
+        //    optionsBuilder.UseSqlServer("DefaultConnection").UseLoggerFactory(null);
+        //}
     }
 }

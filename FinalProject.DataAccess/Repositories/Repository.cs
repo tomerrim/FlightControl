@@ -1,10 +1,5 @@
 ﻿using FinalProject.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FinalProject.DataAccess.Repositories
 {
@@ -16,7 +11,7 @@ namespace FinalProject.DataAccess.Repositories
             _data = data;
         }
 
-        async Task IRepository.AddFlightAsync(Flight flight) => await _data.AddAsync(flight);
+        async Task IRepository.AddFlightAsync(Flight flight) => await _data.Flights.AddAsync(flight);
 
         async Task IRepository.AddLoggerAsync(Logger logger) => await _data.Loggers.AddAsync(logger);
 

@@ -5,7 +5,7 @@
 
 <div class="text-center">
     <h1 class="display-4">Flights</h1>
-    <table class="table table-bordered table-striped " style="width:100%">
+    <table id="flightsTable" class="table table-bordered table-striped" style="width:100%">
         <thead>
             <tr class="text-center">
                 <th>Leg</th>
@@ -14,8 +14,8 @@
                 <th>Out</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var log in Model)
+        <tbody id="flightsTableBody" class="overflow-auto" style="height:600px">
+            @foreach (var log in Model) @*.Reverse()*@
             {
                 <tr>
                     <td>@log.Leg?.Id</td>
@@ -25,28 +25,11 @@
                 </tr>
             }
         </tbody>
-        @*<thead>
-        <tr class="text-center">
-        <th>Brand</th>
-        <th>Passengers</th>
-        <th>IsDeparture</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var flight in Model)
-        {
-        <tr class="hidden">
-        <td width="10%">
-        @flight.Brand
-        </td>
-        <td width="5%">
-        @flight.PassengersCount
-        </td>
-        <td width="15%" style="color: @flight.IsDeparture ? red : black">
-        @flight.IsDeparture
-        </td>
-        </tr>
-        }
-        </tbody>*@
     </table>
 </div>
+
+@section Scripts{
+@*    <script src="~/lib/@@microsoft/signalr/dist/browser/signalr.min.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.6/signalr.min.js"></script>
+    <script type="module" src="~/js/Flights.js"></script>
+}

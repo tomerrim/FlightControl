@@ -24,13 +24,9 @@ namespace FinalProject.Client.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occured");
+                //return View(new List<LoggerDto>());
                 throw;
             }
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

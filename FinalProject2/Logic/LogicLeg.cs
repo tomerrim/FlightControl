@@ -1,40 +1,23 @@
-﻿using FinalProject.DataAccess;
+﻿using FinalProject.Client.Hubs;
+using FinalProject.DataAccess.Repositories;
 using FinalProject.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System.Security.Cryptography;
 
 namespace FinalProject2.Server.Logic
 {
     public class LogicLeg
     {
-        private readonly Dal _data;
-        public LogicLeg(IConfiguration config)
+        private readonly IRepository _repository;
+        private readonly FlightsHub _hub;
+        public LogicLeg(IRepository repository, FlightsHub hub)
         {
-            var connectionString = config.GetConnectionString("DefaultConnection");
-            var optionsBuilder = new DbContextOptionsBuilder<Dal>();
-            optionsBuilder.UseSqlServer(connectionString);
-            _data = new Dal(optionsBuilder.Options);
+            _repository = repository;
+            _hub = hub;
         }
-
-        //public LogicLeg(Dal data)
-        //{
-        //    _data = data;
-        //}
         public int FlightCounter { get; set; }
-
-        //public async Task AddFlight()
-        //{
-        //    string[] brands = { "Arkia", "Brussels Airlines", "Emirates", "El-Al" }; // add later more brands
-        //    var flight = new Flight { IsDeparture = false, Brand = GetRandomBrand(brands), PassengersCount = GetRandomPassengers() };
-        //    var startLeg = await data.Legs.FirstAsync(l => l.Number == 1);
-        //    startLeg.Flight = flight;
-        //    await NextTerminal(flight, startLeg);
-        //}
 
         public async Task AddFlight(Flight flight)
         {
-            var startLeg = await _data.Legs.FirstAsync(l => l.Number == 1);
+            var startLeg = await _repository.FirstLegAsync();
             startLeg.Flight = flight;
             await NextTerminal(flight, startLeg);
         }
@@ -42,8 +25,9 @@ namespace FinalProject2.Server.Logic
         private async Task NextTerminal(Flight flight, Leg leg)
         {
             var log = new Logger { Flight = flight, Leg = leg, In = DateTime.Now };
-            await _data.Loggers.AddAsync(log);
-            if(leg.Number == 1)
+            await _repository.AddLoggerAsync(log);
+            //await _hub.UpdateLoggers(log); //
+            if (leg.Number == 1)
                 Console.ForegroundColor = ConsoleColor.Green;
             await Console.Out.WriteLineAsync($"{flight.Id} - {flight.Brand} Leg: {leg.Number} ({DateTime.Now})");
             Console.ResetColor();
@@ -68,7 +52,7 @@ namespace FinalProject2.Server.Logic
             }
 
             Thread.Sleep(leg.WaitTime * 1000);
-            var nextLeg = await _data.Legs.FirstOrDefaultAsync(l => leg.NextLegs.HasFlag(l.CurrentLeg));
+            var nextLeg = await _repository.NextLegAsync(leg);
             if (leg.CurrentLeg == LegNumber.Fou && flight.IsDeparture)
             {
                 log.Out = DateTime.Now;
@@ -76,7 +60,7 @@ namespace FinalProject2.Server.Logic
                 Console.ForegroundColor = ConsoleColor.Green;
                 await Console.Out.WriteLineAsync($"{flight.Id} - {flight.Brand}: Departure from {leg.Number}");
                 Console.ResetColor();
-                await _data.SaveChangesAsync();
+                await _repository.SaveAsync();
                 return;
             }
             else if (nextLeg?.Flight == null)
@@ -84,20 +68,16 @@ namespace FinalProject2.Server.Logic
                 nextLeg!.Flight = flight;
                 leg.Flight = null;
                 log.Out = DateTime.Now;
+                await _hub.UpdateLoggers(log); //
 
                 flight.IsDeparture = leg.IsChangeStatus;
             }
-            await SaveAsync();
-
+            else if (nextLeg?.Flight != null)
+            {
+                await NextTerminal(flight, leg);
+            }
+            await _repository.SaveAsync();
             await NextTerminal(flight, nextLeg);
         }
-
-        //move later to repository
-        public async Task AsyncAdd(Flight flight) => await _data.AddAsync(flight);
-        public async Task SaveAsync() => await _data.SaveChangesAsync();
-        //public async Task<IEnumerable<Flight>> AsyncList() => await data.Flights.ToListAsync();
-        public async Task<IEnumerable<Logger>> AsyncList() => await _data.Loggers.Include(x => x.Leg).Include(x => x.Flight).ToListAsync();
-
-        //
     }
 }
