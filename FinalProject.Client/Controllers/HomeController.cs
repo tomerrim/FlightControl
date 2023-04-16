@@ -24,7 +24,6 @@ namespace FinalProject.Client.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occured");
-                //return View(new List<LoggerDto>());
                 throw;
             }
         }

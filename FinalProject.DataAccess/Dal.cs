@@ -4,8 +4,6 @@ namespace FinalProject.DataAccess
 {
     public class Dal : DbContext
     {
-        //private static readonly DbContextOptions<ApplicationDbContext> DbContextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-        //.UseSqlServer("DefaultConnection").Options;
         public Dal(DbContextOptions<Dal> options) : base(options) { }
         public virtual DbSet<Flight> Flights { get; set; }
         public virtual DbSet<Leg> Legs { get; set; }
@@ -24,10 +22,5 @@ namespace FinalProject.DataAccess
             new Leg { Id = 8, Number = 8, WaitTime = 2, IsChangeStatus = true, CurrentLeg = LegNumber.Eig, NextLegs = LegNumber.Fou }
              );
         }
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    // Disable logging
-        //    optionsBuilder.UseSqlServer("DefaultConnection").UseLoggerFactory(null);
-        //}
     }
 }

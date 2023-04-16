@@ -26,7 +26,6 @@ namespace FinalProject2.Server.Logic
         {
             var log = new Logger { Flight = flight, Leg = leg, In = DateTime.Now };
             await _repository.AddLoggerAsync(log);
-            //await _hub.UpdateLoggers(log); //
             if (leg.Number == 1)
                 Console.ForegroundColor = ConsoleColor.Green;
             await Console.Out.WriteLineAsync($"{flight.Id} - {flight.Brand} Leg: {leg.Number} ({DateTime.Now})");
@@ -42,7 +41,6 @@ namespace FinalProject2.Server.Logic
                         Console.ForegroundColor = ConsoleColor.Red;
                         await Console.Out.WriteLineAsync($"terminals are at full capacity with {FlightCounter} flights , wait a few seconds...");
                         Console.ResetColor();
-                        // add logic to stop creating new flights and stop the flights that on terminal 1,2,3 until FlightCounter < 4
                     }
                 }
                 else
@@ -68,7 +66,7 @@ namespace FinalProject2.Server.Logic
                 nextLeg!.Flight = flight;
                 leg.Flight = null;
                 log.Out = DateTime.Now;
-                await _hub.UpdateLoggers(log); //
+                await _hub.UpdateLoggers(log);
 
                 flight.IsDeparture = leg.IsChangeStatus;
             }

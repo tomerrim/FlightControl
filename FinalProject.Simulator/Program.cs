@@ -4,21 +4,17 @@ using Timer = System.Timers.Timer;
 
 var client = new HttpClient { BaseAddress = new Uri("http://localhost:5059") };
 
-string[] brands = { "Arkia", "Brussels Airlines", "Emirates", "El-Al" }; // add later more brands
+string[] brands = { "Arkia", "Brussels Airlines", "Emirates", "El-Al" };
 
 var timer = new Timer(10000);
 timer.Elapsed += async (s, e) => await CreateFlight();
 timer.Start();
 
-//var timer = new Timer(10000);
-//timer.Elapsed += async (s, e) => await LogicLeg.AddFlight(); 
-//timer.Start();
-
 Console.ReadLine();
 
 async Task CreateFlight()
 {
-    var flight = new FlightDto { Brand = GetRandomBrand(brands), PassengersCount = GetRandomPassengers() };//add another props later
+    var flight = new FlightDto { Brand = GetRandomBrand(brands), PassengersCount = GetRandomPassengers() };
     var response = await client.PostAsJsonAsync("api/flights", flight);
     if (response.IsSuccessStatusCode)
         await Console.Out.WriteLineAsync($"{flight.Brand} Airplane with {flight.PassengersCount} passengers took off from Leg 4 on time: {DateTime.Now}");

@@ -6,10 +6,7 @@ namespace FinalProject.DataAccess.Repositories
     public class Repository : IRepository
     {
         private readonly Dal _data;
-        public Repository(Dal data)
-        {
-            _data = data;
-        }
+        public Repository(Dal data) => _data = data;
 
         async Task IRepository.AddFlightAsync(Flight flight) => await _data.Flights.AddAsync(flight);
 
