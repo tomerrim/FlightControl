@@ -1,2 +1,4 @@
 # FlightControl
 FlightControl is a C# project that simulates airplanes arriving and departing from an airport. The project features a server-side ASP .NET Core Web API, a client-side ASP .NET Core MVC application, and a MSSQL database. The project also includes SignalR for an open connection between the server and the client. Additionally, there is a console application that creates flights and sends them to the server. The server-side logic moves the flights between terminals, and every time a plane moves to a different terminal, it is written to the database. With its sophisticated features and attention to detail, FlightControl is an impressive simulation of real-world air traffic management.
+
+![flightcontrol](https://user-images.githubusercontent.com/126825978/233703614-68b040af-2b7c-4fe3-b5e6-4028a197a9af.png)
